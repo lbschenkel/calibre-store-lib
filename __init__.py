@@ -120,7 +120,6 @@ class GenericStore():
             result.formats = self.normalize_formats(result.formats)
         if result.drm and not isinstance(result.drm, int):
             result.drm = self.normalize_drm(result.drm)
-            print(result.drm)
         return result
 
     def normalize_author(self, text):
@@ -131,12 +130,10 @@ class GenericStore():
 
     def normalize_drm(self, text):
         words = text.strip().lower().split()
-        print(words)
         for word in self.words_drm_locked:
             if word in words:
                 return SearchResult.DRM_LOCKED
         for word in self.words_drm_unlocked:
-            print(word)
             if word in words:
                 return SearchResult.DRM_UNLOCKED
         return SearchResult.DRM_UNKNOWN
