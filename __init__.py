@@ -5,12 +5,13 @@ from calibre import browser
 from calibre.gui2 import open_url
 from calibre.gui2.store.search_result import SearchResult
 from calibre.gui2.store.web_store_dialog import WebStoreDialog
+
+from six.moves import urllib
+
 from contextlib import closing
 from lxml import html
 from PyQt5.Qt import QUrl
-from urlparse import urljoin
-
-import urllib
+from urllib.parse import urljoin
 
 class GenericStore():
     external_only      = False
@@ -73,7 +74,7 @@ class GenericStore():
             d.exec_()
 
     def quote(self, query):
-        return urllib.quote_plus(query)
+        return urllib.parse.quote_plus(query)
 
     def find_search_results(self, doc):
         return self.find_book_details(doc)
