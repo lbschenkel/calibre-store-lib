@@ -144,14 +144,31 @@ class GenericStore():
 
 def xpath(node, elem, cls='', suffix=''):
     if cls:
-        xpath = '{0}[contains(@class, "{1}")]{2}'.format(elem, cls, suffix)
+        xpath = '({0}[contains(@class, "{1}")]){2}'.format(elem, cls, suffix)
     else:
-        xpath = '{0}{1}'.format(elem, suffix)
+        xpath = '({0}){1}'.format(elem, suffix)
     return node.xpath(xpath)
 
-def text(node, elem, cls='', suffix='//text()'):
+def text(node, elem, cls='', suffix='//text()', joiner=' & '):
     value = xpath(node, elem, cls, suffix)
-    value = ''.join(value).replace('\r\n', ' ').strip()
+    # clean up each element:
+    value = [
+        v.replace('\r\n', ' ')
+        .replace('\r', ' ')
+        .replace('\n', ' ')
+        .strip()
+        for v in value
+    ]
+    # remove empty elements:
+    value = [v for v in value if v]
+    # concatenate into single string:
+    value = (
+        joiner.join(value)
+        .replace('\r\n', ' ')
+        .replace('\r', ' ')
+        .replace('\n', ' ')
+        .strip()
+    )
     return value
 
 
