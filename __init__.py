@@ -56,12 +56,15 @@ class GenericStore():
             else:
                 r = self.normalize(r)
             
-            result.title     = r.title if r.title else result.title
             result.author    = r.author if r.author else result.author
             result.price     = r.price if r.price else result.price
             result.cover_url = r.cover_url if r.cover_url else result.cover_url
             result.formats   = r.formats if r.formats else result.formats
             result.drm       = r.drm if r.drm else result.drm
+            # Some stores have the "detail title" truncated compared to the "search result title".
+            # Make sure to take the longest of the two so it is more likely to match the search terms.
+            result.title     = r.title if r.title and not result.title.startswith(r.title) else result.title
+
             return True
 
     def open(self, name, gui, parent, item, external):
